@@ -1,0 +1,26 @@
+<div class="w-screen h-screen flex">
+  <div class="w-80">
+    <mat-form-field>
+      <mat-label>Length</mat-label
+      ><input
+        type="number"
+        matInput
+        [min]="0"
+        [ngModel]="modelProperties().length"
+        (ngModelChange)="updateLength($event)"
+      />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Width</mat-label>
+      <input
+        type="number"
+        [min]="0"
+        matInput
+        [ngModel]="modelProperties().width"
+        (ngModelChange)="updateWidth($event)"
+      />
+    </mat-form-field>
+  </div>
+  <app-model-viewer [dataSource]="modelProperties" />
+</div>
