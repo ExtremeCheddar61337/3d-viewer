@@ -1,25 +1,45 @@
 <div class="w-screen h-screen flex">
-  <div class="w-80">
+  <div class="w-80 bg-neutral-800">
     <mat-form-field>
-      <mat-label>Length</mat-label
+      <mat-label>Width</mat-label
       ><input
         type="number"
         matInput
         [min]="0"
-        [ngModel]="modelProperties().length"
-        (ngModelChange)="updateLength($event)"
+        [ngModel]="modelProperties().width"
+        (ngModelChange)="updateWidth($event)"
       />
     </mat-form-field>
 
     <mat-form-field>
-      <mat-label>Width</mat-label>
+      <mat-label>Height</mat-label>
       <input
         type="number"
         [min]="0"
         matInput
-        [ngModel]="modelProperties().width"
-        (ngModelChange)="updateWidth($event)"
+        [ngModel]="modelProperties().height"
+        (ngModelChange)="updateHeight($event)"
       />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Depth</mat-label>
+      <input
+        type="number"
+        [min]="0"
+        matInput
+        [ngModel]="modelProperties().depth"
+        (ngModelChange)="updateDepth($event)"
+      />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Color</mat-label>
+      <mat-select [(ngModel)]="modelProperties().color" (ngModelChange)="updateColor($event)">
+        <mat-option value="#5B9034">Green</mat-option>
+        <mat-option value="#953C6F">Magenta</mat-option>
+        <mat-option value="#6BD1FF">Blue</mat-option>
+      </mat-select>
     </mat-form-field>
   </div>
   <app-model-viewer [dataSource]="modelProperties" />

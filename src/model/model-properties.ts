@@ -1,4 +1,6 @@
 export interface ModelProperties {
-  length: number;
   width: number;
+  height: number;
+  depth: number;
+  color: string;
 }

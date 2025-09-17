@@ -10,7 +10,9 @@ import {
 } from '@angular/core';
 import {
   AmbientLight,
+  AxesHelper,
   BoxGeometry,
+  Color,
   DirectionalLight,
   Mesh,
   MeshPhysicalMaterial,
@@ -30,18 +32,17 @@ export class ModelViewer implements OnInit {
   @ViewChild('threeCanvas', { static: true })
   private threeCanvas?: ElementRef<HTMLCanvasElement>;
 
-  @Input() public dataSource = signal<ModelProperties>({
-    length: 1,
-    width: 1,
-  });
+  @Input() public dataSource!: ReturnType<typeof signal<ModelProperties>>;
 
   private cameraFov = 75;
   private cameraNearDistance = 0.1;
   private cameraFarDistance = 1000;
   private cameraDistance = 5;
+  private axesScaleFactor = 0.75;
 
   private canvas?: HTMLCanvasElement;
   private scene?: Scene;
+  private axesHelper?: AxesHelper;
   private camera?: PerspectiveCamera;
   private renderer?: WebGLRenderer;
   private orbitControls?: OrbitControls;
@@ -50,7 +51,7 @@ export class ModelViewer implements OnInit {
   constructor() {
     // Detect changes of signals (like data source) => update model
     effect(() => {
-      this.updateModel();
+      this.updateScene();
     });
   }
 
@@ -114,9 +115,18 @@ export class ModelViewer implements OnInit {
 
   private setupTestScene() {
     if (this.scene) {
+      // Setup BG
+      this.scene.background = new Color('#1E1E1E');
+      this.axesHelper = new AxesHelper(this.getMaxLength() * this.axesScaleFactor);
+      this.scene.add(this.axesHelper);
+
       // Setup cube
-      const geometry = new BoxGeometry(1, 1, 1);
-      const material = new MeshPhysicalMaterial({ color: 0x00ff00 });
+      const geometry = new BoxGeometry(
+        this.dataSource().width,
+        this.dataSource().height,
+        this.dataSource().depth,
+      );
+      const material = new MeshPhysicalMaterial({ color: new Color(this.dataSource().color) });
       this.cube = new Mesh(geometry, material);
       this.scene.add(this.cube);
 
@@ -131,10 +141,27 @@ export class ModelViewer implements OnInit {
     }
   }
 
-  private updateModel() {
+  private updateScene() {
     if (this.cube) {
-      this.cube.scale.setX(this.dataSource().length);
-      this.cube.scale.setZ(this.dataSource().width);
+      this.axesHelper!.scale.set(
+        this.getMaxLength() * this.axesScaleFactor,
+        this.getMaxLength() * this.axesScaleFactor,
+        this.getMaxLength() * this.axesScaleFactor,
+      );
+
+      this.cube.scale.setX(this.dataSource().width);
+      this.cube.scale.setY(this.dataSource().height);
+      this.cube.scale.setZ(this.dataSource().depth);
+      (this.cube.material as MeshPhysicalMaterial).color.set(this.dataSource().color);
     }
+  }
+
+  private getMaxLength(): number {
+    if (!this.dataSource) return 0;
+
+    const { width, height, depth } = this.dataSource();
+    const lenghts: number[] = [width, height, depth];
+
+    return Math.max(...lenghts);
   }
 }
