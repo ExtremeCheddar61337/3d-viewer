@@ -2,45 +2,27 @@
   <div class="w-80 bg-neutral-800">
     <mat-form-field>
       <mat-label>Width</mat-label
-      ><input
-        type="number"
-        matInput
-        [min]="0"
-        [ngModel]="modelProperties().width"
-        (ngModelChange)="updateWidth($event)"
-      />
+      ><input type="number" matInput [min]="0" [(ngModel)]="modelService.width" />
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>Height</mat-label>
-      <input
-        type="number"
-        [min]="0"
-        matInput
-        [ngModel]="modelProperties().height"
-        (ngModelChange)="updateHeight($event)"
-      />
+      <input type="number" [min]="0" matInput [(ngModel)]="modelService.height" />
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>Depth</mat-label>
-      <input
-        type="number"
-        [min]="0"
-        matInput
-        [ngModel]="modelProperties().depth"
-        (ngModelChange)="updateDepth($event)"
-      />
+      <input type="number" [min]="0" matInput [(ngModel)]="modelService.depth" />
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>Color</mat-label>
-      <mat-select [(ngModel)]="modelProperties().color" (ngModelChange)="updateColor($event)">
+      <mat-select [(ngModel)]="modelService.color">
         <mat-option value="#5B9034">Green</mat-option>
         <mat-option value="#953C6F">Magenta</mat-option>
         <mat-option value="#6BD1FF">Blue</mat-option>
       </mat-select>
     </mat-form-field>
   </div>
-  <app-model-viewer [dataSource]="modelProperties" />
+  <app-model-viewer />
 </div>
